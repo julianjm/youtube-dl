@@ -152,6 +152,7 @@ from .cbssports import CBSSportsIE
 from .ccc import CCCIE
 from .cctv import CCTVIE
 from .cda import CDAIE
+from .cdnlaola1tv import CDNLaola1TvIE
 from .ceskatelevize import CeskaTelevizeIE
 from .channel9 import Channel9IE
 from .charlierose import CharlieRoseIE
