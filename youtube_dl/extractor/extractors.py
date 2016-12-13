@@ -304,6 +304,7 @@ from .egghead import (
     EggheadCourseIE,
     EggheadLessonIE,
 )
+from .ehftv import EhfTvIE
 from .ehow import EHowIE
 from .eighttracks import EightTracksIE
 from .einthusan import EinthusanIE
