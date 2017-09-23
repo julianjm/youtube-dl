@@ -178,6 +178,7 @@ from .ceskatelevize import (
     CeskaTelevizeIE,
     CeskaTelevizePoradyIE,
 )
+from .cdnlaola1tv import CDNLaola1TvIE
 from .channel9 import Channel9IE
 from .charlierose import CharlieRoseIE
 from .chaturbate import ChaturbateIE
