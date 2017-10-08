@@ -71,9 +71,8 @@ class CDNLaola1TvIE(InfoExtractor):
             'video': '2',
             'livestream': '17',
         }
-
-        #Streamaccess.. it's que url tag in the previous xml download
-        req = sanitized_Request(_v('url', fatal=True));
+        streamurl = _v('url', fatal=True)
+        streamurl = streamurl.replace("_hds","_hls")
 
         timestamp = self._search_regex(
             r'flashvars\.timestamp\ =\ \"([0-9]+)\"',
@@ -83,19 +82,9 @@ class CDNLaola1TvIE(InfoExtractor):
             r'var\ auth\ =\ \"([0-9a-z]+)\"',
             webpage, 'auth')
 
-        token_url = "%s&ident=%s&klub=0&unikey=0&timestamp=%s&auth=%s" % ( _v('url', fatal=True), "", timestamp, auth )
-        token_doc = self._download_xml(token_url, display_id, 'Downloading token')
+        token_url = "%s&ident=%s&klub=0&unikey=0&timestamp=%s&auth=%s&format=iphone" % ( streamurl, "", timestamp, auth )
 
-        token_attrib = xpath_element(token_doc, './/token').attrib
-        token_auth = token_attrib['auth']
-
-        if token_auth in ('blocked', 'restricted', 'error'):
-            raise ExtractorError(
-                'Token error: %s' % token_attrib['comment'], expected=True)
-
-        formats = self._extract_f4m_formats(
-            '%s?hdnea=%s&hdcore=3.6.0' % (token_attrib['url'], token_auth),
-            video_id, f4m_id='hds')
+        formats = self._extract_formats(token_url, video_id)
         self._sort_formats(formats)
 
         categories_str = _v('meta_sports')
@@ -111,3 +100,20 @@ class CDNLaola1TvIE(InfoExtractor):
             'is_live': _v('islive') == 'true',
             'formats': formats,
         }
+
+    def _extract_formats(self, token_url, video_id):
+        token_doc = self._download_xml(
+            token_url, video_id, 'Downloading token',
+            headers=self.geo_verification_headers())
+
+        token_attrib = xpath_element(token_doc, './/token').attrib
+
+        if token_attrib['status'] != '0':
+            raise ExtractorError(
+                'Token error: %s' % token_attrib['comment'], expected=True)
+
+        formats = self._extract_akamai_formats(
+            '%s?hdnea=%s' % (token_attrib['url'], token_attrib['auth']),
+            video_id)
+        self._sort_formats(formats)
+        return formats
