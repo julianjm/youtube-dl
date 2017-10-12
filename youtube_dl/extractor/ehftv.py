@@ -62,7 +62,7 @@ class EhfTvIE(EhfTvBaseIE):
 
         config = self._download_json(conf['configUrl'], video_id, query={
             'videoid': video_id,
-            'partnerid': conf['partnerid'],
+            'partnerid': 2302,
             'language': conf.get('language', ''),
             'portal': conf.get('portalid', ''),
         })
