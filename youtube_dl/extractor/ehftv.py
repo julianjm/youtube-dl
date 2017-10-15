@@ -61,9 +61,9 @@ class EhfTvIE(EhfTvBaseIE):
         video_id = conf['videoid']
 
         partnerid=conf['partnerid']
-        if partnerid==1:
+        if partnerid=="1":
             partnerid=2302
-        if partnerid==22:
+        if partnerid=="22":
             pass
 
         config = self._download_json(conf['configUrl'], video_id, query={
