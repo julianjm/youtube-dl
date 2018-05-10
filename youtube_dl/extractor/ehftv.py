@@ -54,8 +54,10 @@ class EhfTvIE(EhfTvBaseIE):
         if 'Dieser Livestream ist bereits beendet.' in webpage:
             raise ExtractorError('This live stream has already finished.', expected=True)
 
-        conf = self._parse_json(self._search_regex(
-            r'(?s)conf\s*=\s*({.+?});', webpage, 'conf'),
+	conf_raw = self._search_regex(r'(?s)conf\s*=\s*({.+?});', webpage, 'conf')
+        conf_clean = "\n".join( filter( lambda x: "shareurl" not in x , conf_raw.split("\n")) )
+        conf = self._parse_json(
+            conf_clean,
             display_id, js_to_json)
 
         video_id = conf['videoid']
