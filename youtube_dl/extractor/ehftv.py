@@ -61,17 +61,13 @@ class EhfTvIE(EhfTvBaseIE):
             display_id, js_to_json)
 
         video_id = conf['videoid']
-
-        partnerid=conf['partnerid']
-        if partnerid=="1":
-            partnerid=2302
-        if partnerid=="22":
-            pass
+        partnerid = conf['partnerid']
 
         config = self._download_json(conf['configUrl'], video_id, query={
             'videoid': video_id,
             'partnerid': partnerid,
             'language': conf.get('language', ''),
+            'format': 'iphone',
             'portal': conf.get('portalid', ''),
         })
         error = config.get('error')
@@ -86,8 +82,9 @@ class EhfTvIE(EhfTvBaseIE):
         categories = sports.split(',') if sports else []
 
         token_url = self._extract_token_url(
-            video_data['streamAccess'], video_id,
+            "https:" + video_data['streamAccess'], video_id,
             video_data['abo']['required'])
+        print(5555, token_url)
 
         formats = self._extract_formats(token_url, video_id)
 
