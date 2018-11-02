@@ -84,7 +84,6 @@ class EhfTvIE(EhfTvBaseIE):
         token_url = self._extract_token_url(
             "https:" + video_data['streamAccess'], video_id,
             video_data['abo']['required'])
-        print(5555, token_url)
 
         formats = self._extract_formats(token_url, video_id)
 
